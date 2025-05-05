@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ardent's Little Lighting Lab!</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .slider-container {
+            margin-bottom: 20px;
+        }
+        .light-box {
+            width: 60px;
+            height: 60px;
+            background-color: rgb(255, 255, 255);
+            border: 2px solid #000;
+            margin-top: 10px;
+        }
+        .light-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+        }
+        .grid {
+            display: flex;
+            justify-content: left;
+            flex-wrap: wrap;
+        }
+        input[type="range"].vertical {
+            writing-mode: bt-lr; /* bottom to top, left to right */
+            -webkit-appearance: slider-vertical;
+            width: 20px;
+            height: 256px;
+        }
+    </style>
+</head>
+<body>
+	<h1>Ardent's Little Lighting Lab!</h1>
+	<p>made with my bestie ChatGPT</p>
+	<hr>
+	<a href='index.html'>home</a><br>
+	<a href='rgb_cmyk.html'>colours!</a><br>
+	<a href='manylights.html'>one channels</a>
+	<hr>
+	<p>wanna learn html? try asking chatgpt >:D</p>
+</body>
+
+<body>
+    <h1>Many Lights (Very Many)</h1>
+    <div class="slider-container">
+        <label for="masterSlider">Master Fader:</label>
+        <input type="range" id="masterSlider" min="0" max="255" value="0" class="vertical">
+        <span id="masterValue">255</span>
+    </div>
+
+    <div id="lightsContainer" class="grid"></div>
+
+    <script>
+        const NUM_LIGHTS = 10;
+        const lightsContainer = document.getElementById("lightsContainer");
+        const masterSlider = document.getElementById("masterSlider");
+        const masterValue = document.getElementById("masterValue");
+
+        const lights = [];
+
+        function createLightControl(index) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "light-wrapper";
+
+            const slider = document.createElement("input");
+            slider.type = "range";
+            slider.min = "0";
+            slider.max = "255";
+            slider.value = "0";
+            slider.className = "vertical";
+
+            const valueLabel = document.createElement("span");
+            valueLabel.textContent = "255";
+
+            const box = document.createElement("div");
+            box.className = "light-box";
+
+            wrapper.appendChild(slider);
+            wrapper.appendChild(valueLabel);
+            wrapper.appendChild(box);
+            lightsContainer.appendChild(wrapper);
+
+            lights.push({ slider, valueLabel, box });
+        }
+
+        function updateLights() {
+            const master = parseInt(masterSlider.value);
+            masterValue.textContent = master;
+            lights.forEach(light => {
+                const value = parseInt(light.slider.value);
+                light.valueLabel.textContent = value;
+                const intensity = Math.round(value * (master / 255));
+                light.box.style.backgroundColor = `rgb(${intensity}, ${intensity}, ${intensity})`;
+            });
+        }
+
+        masterSlider.addEventListener("input", updateLights);
+
+        for (let i = 0; i < NUM_LIGHTS; i++) {
+            createLightControl(i);
+        }
+
+        lights.forEach(light => {
+            light.slider.addEventListener("input", updateLights);
+        });
+
+        updateLights(); // Initial render
+    </script>
+</body>
+</html>
