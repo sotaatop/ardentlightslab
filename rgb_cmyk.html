@@ -4,6 +4,16 @@
     <title>Ardent's Little Lighting Lab!</title>
     <meta charset="UTF-8">
     <style>
+		.split2 {
+			display:flex;
+			flex-direction:row;
+			gap:20px;
+			flex-wrap:wrap;
+		}
+		.column {
+			flex:fit-content;
+			box-sizing:border-box;
+		}
         .colorBox {
             width: 200px;
             height: 200px;
@@ -22,12 +32,17 @@
 	<h1>Ardent's Little Lighting Lab!</h1>
 	<p>made with my bestie ChatGPT</p>
 	<hr>
+	<h3>Navigation</h3>
 	<a href='index.html'>home</a><br>
 	<a href='rgb_cmyk.html'>colours!</a><br>
 	<a href='manylights.html'>one channels</a>
 	<hr>
 
     <h2>RGB</h2>
+	<p style="border: 2px dotted grey; width:fit-content;">
+	commonly found in PAR cans, CYC LEDs, spots that have built in colours.<br>
+	RGB is ADDITIVE. (tip:add red, white, blue to get white light!)
+	</p>
 
     <div class="slider-container">
         <label for="intensitySlider">Intensity:</label>
@@ -59,6 +74,11 @@
     <hr>
 
     <h2>CMYK</h2>
+	
+	<p style="border: 2px dotted grey; width:fit-content;">
+	commonly found in additional filters (DMX controllable)<br>
+	CMYK is subtractive.
+	</p>
 
     <div class="slider-container">
         <label for="cyanSlider">Cyan:</label>
@@ -79,7 +99,7 @@
     </div>
 
     <div class="slider-container">
-        <label for="blackSlider">Black (K):</label>
+        <label for="blackSlider">Black | Key:</label>
         <input type="range" id="blackSlider" min="0" max="255" value="0">
         <span id="blackValue">0</span>
     </div>
@@ -88,6 +108,9 @@
     <div id="cmykBox" class="colorBox"></div>
 	<p>CMYK Hex: <span id="cmykHex">#000000</span></p> <!-- NEW -->
 
+	<hr>
+	<h3>Studio Ardent batch 24/25 PA/AVA enthusiasts</h3>
+	<p>teaching tool for lights visualisation</p>
 
     <script>
         // RGB sliders
