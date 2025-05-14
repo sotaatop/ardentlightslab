@@ -1,3 +1,26 @@
+<!--
+   testing.html
+   
+   Copyright 2025 potato <potato@sotaatop.lan>
+   
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+   MA 02110-1301, USA.
+   
+   
+-->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,16 +28,16 @@
     <meta charset="UTF-8">
     <style>
         .split2 {
-			display:flex;
-			flex-direction:row;
-			gap:20px;
-			flex-wrap:wrap;
-		}
-		.column {
-			flex:fit-content;
-			box-sizing:border-box;
-		}
-		
+            display:flex;
+            flex-direction:row;
+            gap:20px;
+            flex-wrap:wrap;
+        }
+        .column {
+            flex:fit-content;
+            box-sizing:border-box;
+        }
+
         .slider-container {
             margin-bottom: 20px;
         }
@@ -37,7 +60,7 @@
             flex-wrap: wrap;
         }
         input[type="range"].vertical {
-            writing-mode: bt-lr; /* bottom to top, left to right */
+            writing-mode: bt-lr;
             -webkit-appearance: slider-vertical;
             width: 20px;
             height: 256px;
@@ -45,31 +68,34 @@
     </style>
 </head>
 <body>
-	<h1>Ardent's Little Lighting Lab!</h1>
-	<p>made with my bestie ChatGPT</p>
-	<hr>
-	<h3>Navigation</h3>
-	<a href='index.html'>home</a><br>
-	<a href='rgb_cmyk.html'>colours!</a><br>
-	<a href='manylights.html'>one channels</a>
-	<hr>
-	
+    <h1>Ardent's Little Lighting Lab!</h1>
+    <p>made with my bestie ChatGPT</p>
+    <hr>
+    <h3>Navigation</h3>
+    <a href='index.html'>home</a><br>
+    <a href='rgb_cmyk.html'>colours!</a><br>
+    <a href='manylights.html'>one channels</a>
+    <hr>
+
     <h1>Many Lights (Very Many)</h1>
-	
-	<p style="border: 2px dotted grey; width:fit-content;"> a master slider controls the value of ALL lights.</p>
+
+    <p style="border: 2px dotted grey; width:fit-content;"> a master slider controls the value of ALL lights.</p>
 
     <div class="slider-container">
         <label for="masterSlider">Master Fader:</label>
         <input type="range" id="masterSlider" min="0" max="255" value="0" class="vertical">
         <span id="masterValue">255</span>
-	</div>
+    </div>
+    
+    <p style="border: 2px dotted grey; width:fit-content;">simple flash: when held down, will 255. <br>can be customised on an actual board.<br>sorry im not that good at programming</p>
+
 
     <div id="lightsContainer" class="grid"></div>
 	
-	<hr>
-	<h3>Studio Ardent batch 24/25 PA/AVA enthusiasts</h3>
-	<p>teaching tool for lights visualisation</p>
-	
+    <hr>
+    <h3>Studio Ardent batch 24/25 PA/AVA enthusiasts</h3>
+    <p>teaching tool for lights visualisation</p>
+
     <script>
         const NUM_LIGHTS = 10;
         const lightsContainer = document.getElementById("lightsContainer");
@@ -92,25 +118,53 @@
             const valueLabel = document.createElement("span");
             valueLabel.textContent = "255";
 
+            const flashButton = document.createElement("button");
+            flashButton.textContent = "Flash";
+
             const box = document.createElement("div");
             box.className = "light-box";
 
+            const light = {
+                slider,
+                valueLabel,
+                box,
+                isFlashing: false,
+                flashButton
+            };
+
+            // Add event listeners for flash behavior
+            flashButton.addEventListener("mousedown", () => {
+                light.isFlashing = true;
+                updateLights();
+            });
+            flashButton.addEventListener("mouseup", () => {
+                light.isFlashing = false;
+                updateLights();
+            });
+            flashButton.addEventListener("mouseleave", () => {
+                light.isFlashing = false;
+                updateLights();
+            });
+
+            slider.addEventListener("input", updateLights);
+
             wrapper.appendChild(slider);
             wrapper.appendChild(valueLabel);
+            wrapper.appendChild(flashButton);
             wrapper.appendChild(box);
             lightsContainer.appendChild(wrapper);
 
-            lights.push({ slider, valueLabel, box });
+            lights.push(light);
         }
 
         function updateLights() {
             const master = parseInt(masterSlider.value);
             masterValue.textContent = master;
             lights.forEach(light => {
-                const value = parseInt(light.slider.value);
+                let value = light.isFlashing ? 255 : parseInt(light.slider.value);
                 light.valueLabel.textContent = value;
                 const intensity = Math.round(value * (master / 255));
-                light.box.style.backgroundColor = `rgb(${intensity}, ${intensity*3/4}, ${intensity*3/4})`;
+                light.box.style.backgroundColor = `rgb(${intensity}, ${intensity*9/10}, ${intensity*7/9})`;
             });
         }
 
@@ -120,11 +174,7 @@
             createLightControl(i);
         }
 
-        lights.forEach(light => {
-            light.slider.addEventListener("input", updateLights);
-        });
-
-        updateLights(); // Initial render
+        updateLights();
     </script>
 </body>
 </html>
